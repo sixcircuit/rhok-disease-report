@@ -1,8 +1,12 @@
 <html>
   <head>
     <title>Hello World.</title>
-    <script src="/static/jquery-1.6.1.min.js"></script>
     
+    <link href="/static/css/jquery-ui-1.8.13.custom.css" rel="stylesheet" type="text/css">
+    
+    <script src="/static/scripts/jquery-1.6.1.min.js"></script>
+    <!-- <script src="/static/scripts/jquery-ui-1.8.13.custom.min.js"><script> -->
+
     <script>
       function hello(){
         alert("hello");
@@ -12,11 +16,15 @@
       
         hello();
         
+        //$("#date").datepicker();
+
         $("#submit").click(function(){
           var vals = {};
           vals.lat = $("#lat").val();
           vals.lon = $("#lon").val();
-          
+          vals.date = $("#date").val();
+          vals.diseaseId = $("#disease").val();
+
           $.post("/report", vals, function(){
             $("#reportInput").html("<h1>Report Submitted. Thank you.</h1>");
           });
@@ -31,8 +39,12 @@
     <div id="reportInput">
     <h1>Report Infection</h1>
     <table>
-      <tr><td>Disease:</td><td><select id="disease" /></td></tr>
-      <tr><td>Date and Time of Diagnosis</td><td></td></tr>
+      <tr><td>Disease:</td><td>
+        <select id="disease">
+          <option value="1">TB</option>
+          <option value="2">HIV</option>
+        </select></td></tr>
+      <tr><td>Date and Time of Diagnosis</td><td><input type="text" id="date" /></td></tr>
       <tr><td>Latitude:</td><td><input type="text" id="lat" /></td></tr>
       <tr><td>Longitude:</td><td><input type="text" id="lon" /></td></tr>
       <tr><td><input type="button" id="submit" value="Submit Report"></td></tr>
