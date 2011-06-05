@@ -29,7 +29,23 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class DiseaseHandler(tornado.web.RequestHandler):
   def get(self):
-    self.write(FT_CLIENT.query(SQL().select(DISEASE_TABLE_ID, ['DiseaseID', 'Disease'])))
+    diseases = FT_CLIENT.query(SQL().select(DISEASE_TABLE_ID, ['DiseaseID', 'Disease']))
+    print diseases
+    diseases = diseases.split('\n')
+    print diseases
+    options = []
+    print diseases
+    for disease in diseases[2:]:
+      disease = disease.split(",")
+      try:
+        option = {
+          'id' : disease[0],
+         'disease' : disease[1]
+        }
+        options.append(option)
+      except:
+        pass
+    self.write(str(options))
 
 class MapHandler(tornado.web.RequestHandler):
   def get(self):
@@ -66,7 +82,7 @@ application = tornado.web.Application([
 ], **settings)
 
 if __name__ == "__main__":
-  application.listen(8080)
+  application.listen(80)
   print("Server listening on all addresses, port 80")
   tornado.ioloop.IOLoop.instance().start()
 
