@@ -35,7 +35,18 @@
       }
 
       function updateMap(diseaseId, startDate, endDate){
-        layer.setQuery("select * from " + fusionTableId + "  where DiseaseID = " + diseaseId);
+        var query = "select * from " + fusionTableId;
+        
+        query += " where DiseaseID = " + diseaseId;
+        
+        if(startDate){
+          query += " and DiagnosisTime > " + (new Date(startDate)).getTime();
+        }
+         if(endDate){
+          query += " and DiagnosisTime < " + (new Date(endDate)).getTime();
+        }
+        alert(query);
+        layer.setQuery(query);
       }
      
       $(function(){
@@ -43,6 +54,19 @@
         hello();
         
         showMap();
+        
+        function uiChange(){
+          var diseaseId = $("#disease").val();
+          var startDate = $("#startDate").val();
+          var endDate = $("#endDate").val();
+
+          updateMap(diseaseId, startDate, endDate);
+
+        }
+
+        $("#disease").change(uiChange);
+        $("#startDate").change(uiChange);
+        $("#endDate").change(uiChange);
 
       });
     
@@ -52,6 +76,14 @@
   </head>
   
   <body>
-    <div id="map" style="width:80%; height:80%"></div>
+    <table>
+      <tr>
+        <td><select id="disease"><option value="1">1</option><option value="2">2</option></select></td>
+        <td><input id="startDate" type="text" /></td><td><input id="endDate" type="text" /></td>
+      </tr>
+    </table>
+
+    <div id="map" style="width:100%; height:90%"></div>
+  
   </body>
 </html>
