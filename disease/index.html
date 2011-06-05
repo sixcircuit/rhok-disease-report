@@ -14,9 +14,12 @@
         
         $("#submit").click(function(){
           var vals = {};
-          vals.lat = 
+          vals.lat = $("#lat").val();
+          vals.lon = $("#lon").val();
           
-          $.post("/report",   
+          $.post("/report", vals, function(){
+            $("#reportInput").html("<h1>Report Submitted. Thank you.</h1>");
+          });
           
         });
       
@@ -28,7 +31,7 @@
     <div id="reportInput">
     <h1>Report Infection</h1>
     <table>
-      <tr><td>Disease:</td><td><select /></td></tr>
+      <tr><td>Disease:</td><td><select id="disease" /></td></tr>
       <tr><td>Date and Time of Diagnosis</td><td></td></tr>
       <tr><td>Latitude:</td><td><input type="text" id="lat" /></td></tr>
       <tr><td>Longitude:</td><td><input type="text" id="lon" /></td></tr>
