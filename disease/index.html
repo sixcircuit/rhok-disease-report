@@ -8,17 +8,32 @@
         alert("hello");
       }
 
-      $(function(){hello();});
+      $(function(){
+      
+        hello();
+        
+        $("#submit").click(function(){
+          var vals = {};
+          vals.lat = 
+          
+          $.post("/report",   
+          
+        });
+      
+      });
 
     </script>
  </head>
   <body>
+    <div id="reportInput">
     <h1>Report Infection</h1>
     <table>
       <tr><td>Disease:</td><td><select /></td></tr>
       <tr><td>Date and Time of Diagnosis</td><td></td></tr>
-      <tr><td>Latitude:</td><td><input type="text" name="lat" /></td></tr>
-      <tr><td>Longitude:</td><td><input type="text" name="lon" /></td></tr>
+      <tr><td>Latitude:</td><td><input type="text" id="lat" /></td></tr>
+      <tr><td>Longitude:</td><td><input type="text" id="lon" /></td></tr>
+      <tr><td><input type="button" id="submit" value="Submit Report"></td></tr>
     </table>
+    </div>
   </body>
 </html>
