@@ -3,26 +3,55 @@
     <title>Disease Map</title>
     
     <script src="/static/scripts/jquery-1.6.1.min.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
     <script>
+    (function(){
       function hello(){
         alert("hello");
       }
 
-      function showMap(diseaseId, startDate, endDate){
-
-
+      var map = null;
+      var layer = null;
+      var fusionTableId = 949030;
+      var defaultLat = 32.9352;
+      var defaultLon = -118.3887;
+      
+      function showMap(){
+       
+       var latlng = new google.maps.LatLng(defaultLat, defaultLon);
+        
+        var myOptions = {
+          zoom: 4,
+          center: latlng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        var map = new google.maps.Map(document.getElementById("map"), myOptions);
+        
+        layer = new google.maps.FusionTablesLayer(fusionTableId, { suppressInfoWindows: true });
+        layer.setMap(map);
+        updateMap(1);
       }
 
+      function updateMap(diseaseId, startDate, endDate){
+        layer.setQuery("select * from " + fusionTableId + "  where DiseaseID = " + diseaseId);
+      }
+     
       $(function(){
       
         hello();
         
+        showMap();
 
       });
-
+    
+    })();
     </script>
- </head>
+ 
+  </head>
+  
   <body>
-</body>
+    <div id="map" style="width:80%; height:80%"></div>
+  </body>
 </html>

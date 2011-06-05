@@ -14,19 +14,26 @@ class IndexHandler(tornado.web.RequestHandler):
   def get(self):
     self.render("index.html")
 
+class MapHandler(tornado.web.RequestHandler):
+  def get(self):
+    self.render("map.html")
+
+
 class DiseaseReportHandler(tornado.web.RequestHandler):
   def post(self):
     print(self.request.arguments)    
 
 
+
 application = tornado.web.Application([
   (r"/", IndexHandler),
   (r"/index", IndexHandler),
+  (r"/map", MapHandler),
   (r"/report", DiseaseReportHandler)
 ], **settings)
 
 if __name__ == "__main__":
-  application.listen(80)
+  application.listen(8080)
   print("Server listening on all addresses, port 80")
   tornado.ioloop.IOLoop.instance().start()
 
