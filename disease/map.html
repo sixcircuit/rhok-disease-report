@@ -3,26 +3,87 @@
     <title>Disease Map</title>
     
     <script src="/static/scripts/jquery-1.6.1.min.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
     <script>
+    (function(){
       function hello(){
         alert("hello");
       }
 
-      function showMap(diseaseId, startDate, endDate){
-
-
+      var map = null;
+      var layer = null;
+      var fusionTableId = 949030;
+      var defaultLat = 32.9352;
+      var defaultLon = -118.3887;
+      
+      function showMap(){
+       
+       var latlng = new google.maps.LatLng(defaultLat, defaultLon);
+        
+        var myOptions = {
+          zoom: 4,
+          center: latlng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        var map = new google.maps.Map(document.getElementById("map"), myOptions);
+        
+        layer = new google.maps.FusionTablesLayer(fusionTableId, { suppressInfoWindows: true });
+        layer.setMap(map);
+        updateMap(1);
       }
 
+      function updateMap(diseaseId, startDate, endDate){
+        var query = "select * from " + fusionTableId;
+        
+        query += " where DiseaseID = " + diseaseId;
+        
+        if(startDate){
+          query += " and DiagnosisTime > " + (new Date(startDate)).getTime();
+        }
+         if(endDate){
+          query += " and DiagnosisTime < " + (new Date(endDate)).getTime();
+        }
+        alert(query);
+        layer.setQuery(query);
+      }
+     
       $(function(){
       
         hello();
         
+        showMap();
+        
+        function uiChange(){
+          var diseaseId = $("#disease").val();
+          var startDate = $("#startDate").val();
+          var endDate = $("#endDate").val();
+
+          updateMap(diseaseId, startDate, endDate);
+
+        }
+
+        $("#disease").change(uiChange);
+        $("#startDate").change(uiChange);
+        $("#endDate").change(uiChange);
 
       });
-
+    
+    })();
     </script>
- </head>
+ 
+  </head>
+  
   <body>
-</body>
+    <table>
+      <tr>
+        <td><select id="disease"><option value="1">1</option><option value="2">2</option></select></td>
+        <td><input id="startDate" type="text" /></td><td><input id="endDate" type="text" /></td>
+      </tr>
+    </table>
+
+    <div id="map" style="width:100%; height:90%"></div>
+  
+  </body>
 </html>
