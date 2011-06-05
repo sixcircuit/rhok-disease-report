@@ -10,10 +10,7 @@
     
   <script>
     (function(){
-      function loaded(){
-        alert("loaded");
-      }
-
+      
       var map = null;
       var layer = null;
       var fusionTableId = 949030;
@@ -34,77 +31,106 @@
         
         layer = new google.maps.FusionTablesLayer(fusionTableId, { suppressInfoWindows: true });
         layer.setMap(map);
-        updateMap(1);
       }
 
       function updateMap(diseaseId, startDate, endDate){
         var query = "select * from " + fusionTableId;
         
         query += " where DiseaseID = " + diseaseId;
-        alert("start:" + startDate + " end date: " + endDate);
+        
         if(startDate){
-          query += " and DiagnosisTime > " + ((new Date(startDate)).getTime() / 1000);
+          query += " and DiagnosisTime > " + (startDate.getTime() / 1000);
         }
          if(endDate){
-          query += " and DiagnosisTime < " + ((new Date(endDate)).getTime() / 1000);
+          query += " and DiagnosisTime < " + (endDate.getTime() / 1000);
         }
-        // alert(query);
+
         layer.setQuery(query);
       }
      
+      function getStartDate(){
+        var startDateStr = $("#startDate").val();
+        
+        if(startDateStr !== ""){
+          return(new Date(startDateStr));
+        }else{
+          return(new Date(0));
+        }
+      }
+      
+      function getEndDate(){
+        var endDateStr = $("#endDate").val();    
+
+        if(endDateStr !== ""){
+          return(new Date(endDateStr));
+        }else{
+          return(new Date());
+        }
+      }
+     
+      function updateSliderMinMax(){
+         var min = 0;
+         var max = 0;
+         
+         var startDate = getStartDate();
+         var endDate = getEndDate();
+         
+         if(startDate.getTime() !== 0){  
+           min = startDate.getTime();
+           max = endDate.getTime();
+         }
+     
+         $("#dateSlider").slider("option", "min", min);
+         $("#dateSlider").slider("option", "max", max);
+       }
+  
+      function updateDates(){
+        updateSliderMinMax();
+        
+        
+        
+      }
+      
+      function sliderChange(sliderVal){
+        
+        
+      }
+       function uiChange(sliderVal){
+         
+         
+         var diseaseId = $("#disease").val();
+         
+         var newStartDate = new Date(Number(sliderVal));
+         console.log(newStartDate);
+         
+         var endDate = getEndDate();
+        
+         updateMap(diseaseId, newStartDate, endDate);
+  
+       }
+
+      function getShortDateString(date){
+        return(date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear());
+      }
+
       $(function(){
       
-        loaded();
-        
         showMap();
-        
-        function updateSliderMinMax(){
-          var min = 0;
-          var max = 0;
-          
-          if($("#startDate").val() && $("#endDate").val()){
-            var startDate = new Date($("#startDate").val());
-            var endDate = new Date($("#endDate").val()); 
-            
-            min = startDate.getTime();
-            max = endDate.getTime();
-            
-            // alert("min: " + min);
-            // alert("max: " + max);
-          }
-            
-          $("#dateSlider").slider("option", "min", min);
-          $("#dateSlider").slider("option", "max", max);
-        }
-
-        function uiChange(){
-          
-          updateSliderMinMax();
-          
-          var diseaseId = $("#disease").val();
-          var startDate = $("#startDate").val();
-          var endDate = $("#endDate").val();
-          var sliderVal = $("#dateSlider").slider("option", "value");
-          var newTime = (new Date(startDate)).getTime() + sliderVal;
-          alert(newTime);
-          var tempDate = new Date(newTime);
-
-          startDate = tempDate.getMonth() + "/" + tempDate.getDate() + "/" + tempDate.getYear();
-         
-          updateMap(diseaseId, startDate, endDate);
-
-        }
-
+      
         $("#disease").change(uiChange);
         $("#startDate").change(uiChange);
         $("#endDate").change(uiChange);
         
         $("#startDate").datepicker();
         $("#endDate").datepicker();
-        $("#dateSlider").slider();
-
-        $("#dateSlider").bind("slidechange", uiChange);
+                    
+        $("#startDate").val(getShortDateString(new Date(0)));
+        $("#endDate").val(getShortDateString(new Date()));
       
+        $("#dateSlider").slider();
+        $("#dateSlider").bind("slidechange", function(event, ui){uiChange(ui.value);});
+        $("#dateSlider").slider("option", "value", (new Date(0)).getTime());
+
       });
     
     })();
@@ -115,6 +141,7 @@
   <body>
     <table>
       <tr>
+      
         <td>Disease:</td>
         <td><select id="disease"><option value="1">1</option><option value="2">2</option></select></td>
        
@@ -126,6 +153,7 @@
         
         <td style="padding-right: 15px;">Time Slider:</td>
         <td><div id="dateSlider" style="width:200px"></div></td>
+      
       </tr>
     </table>
 
