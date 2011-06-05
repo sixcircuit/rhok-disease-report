@@ -1,8 +1,24 @@
 <html>
   <head>
     <title>Hello World.</title>
-  </head>
+    <script src="/static/jquery-1.6.1.min.js"></script>
+    
+    <script>
+      function hello(){
+        alert("hello");
+      }
+
+      $(function(){hello();});
+
+    </script>
+ </head>
   <body>
-    <h1>Hello World.</h1>
+    <h1>Report Infection</h1>
+    <table>
+      <tr><td>Disease:</td><td><select /></td></tr>
+      <tr><td>Date and Time of Diagnosis</td><td></td></tr>
+      <tr><td>Latitude:</td><td><input type="text" name="lat" /></td></tr>
+      <tr><td>Longitude:</td><td><input type="text" name="lon" /></td></tr>
+    </table>
   </body>
 </html>
