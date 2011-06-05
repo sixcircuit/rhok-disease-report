@@ -58,11 +58,16 @@
         
         showMap();
         
+        function updateSliderMinMax(){
+          $("#dateSlider").slider("option", "min");
+        }
+
         function uiChange(){
           var diseaseId = $("#disease").val();
           var startDate = $("#startDate").val();
           var endDate = $("#endDate").val();
-
+          
+          updateSliderMinMax();
           updateMap(diseaseId, startDate, endDate);
 
         }
@@ -73,7 +78,12 @@
         
         $("#startDate").datepicker();
         $("#endDate").datepicker();
-        
+        $("#dateSlider").slider();
+
+        $("#dateSlider").bind("slidechange", function(event, ui) {
+          alert(ui.value);
+        });
+      
       });
     
     })();
@@ -86,6 +96,7 @@
       <tr>
         <td><select id="disease"><option value="1">1</option><option value="2">2</option></select></td>
         <td><input id="startDate" type="text" /></td><td><input id="endDate" type="text" /></td>
+        <td><div id="dateSlider" style="width:200px"></div></td>
       </tr>
     </table>
 
