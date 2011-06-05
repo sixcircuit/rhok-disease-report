@@ -1,4 +1,4 @@
-opyright (C) 2010 Google Inc.
+#Copyright (C) 2010 Google Inc.
 
 """ Builds SQL strings.
 
