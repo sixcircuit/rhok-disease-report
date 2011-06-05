@@ -29,7 +29,7 @@ class IndexHandler(tornado.web.RequestHandler):
 
 class DiseaseHandler(tornado.web.RequestHandler):
   def get(self):
-    self.write(FT_CLIENT.query(SQL().select(DISEASE_TABLE_ID, ['DiseaseID', 'Disease']
+    self.write(FT_CLIENT.query(SQL().select(DISEASE_TABLE_ID, ['DiseaseID', 'Disease'])))
 
 class MapHandler(tornado.web.RequestHandler):
   def get(self):
