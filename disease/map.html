@@ -16,6 +16,7 @@
       var fusionTableId = 949030;
       var defaultLat = 32.9352;
       var defaultLon = -118.3887;
+      var useHeatMap = false;
       
       function showMap(){
        
@@ -31,6 +32,7 @@
         
         layer = new google.maps.FusionTablesLayer(fusionTableId, { suppressInfoWindows: true });
         layer.setMap(map);
+        uiChange();
       }
 
       function updateMap(diseaseId, startDate, endDate){
@@ -45,6 +47,7 @@
           query += " and DiagnosisTime < " + (endDate.getTime() / 1000);
         }
 
+        console.log(query)
         layer.setQuery(query);
       }
      
@@ -84,30 +87,21 @@
          $("#dateSlider").slider("option", "max", max);
        }
   
-      function updateDates(){
+      function datesChange(){
+        $("#dateSlider").slider("option", "value", 0);
         updateSliderMinMax();
-        
-        
-        
+        uiChange();        
       }
-      
-      function sliderChange(sliderVal){
+
+      function uiChange(){
+        var diseaseId = $("#disease").val();
+        var sliderVal = $("#dateSlider").slider("option", "value");
         
+        var newStartDate = new Date(Number(sliderVal));
+        var endDate = getEndDate();
         
+        updateMap(diseaseId, newStartDate, endDate);
       }
-       function uiChange(sliderVal){
-         
-         
-         var diseaseId = $("#disease").val();
-         
-         var newStartDate = new Date(Number(sliderVal));
-         console.log(newStartDate);
-         
-         var endDate = getEndDate();
-        
-         updateMap(diseaseId, newStartDate, endDate);
-  
-       }
 
       function getShortDateString(date){
         return(date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear());
@@ -116,20 +110,30 @@
       $(function(){
       
         showMap();
-      
+        
         $("#disease").change(uiChange);
-        $("#startDate").change(uiChange);
-        $("#endDate").change(uiChange);
+        
+        $("#startDate").change(datesChange);
+        $("#endDate").change(datesChange);
+        
+        $("#heatmap").change(function(){
+          useHeatMap = !useHeatMap;
+          if(useHeatMap){
+            layer.setOptions({heatmap : {enabled : useHeatMap}})
+          }else{
+            showMap();
+          }
+        });
         
         $("#startDate").datepicker();
         $("#endDate").datepicker();
                     
         $("#startDate").val(getShortDateString(new Date(0)));
         $("#endDate").val(getShortDateString(new Date()));
-      
+        
         $("#dateSlider").slider();
-        $("#dateSlider").bind("slidechange", function(event, ui){uiChange(ui.value);});
-        $("#dateSlider").slider("option", "value", (new Date(0)).getTime());
+        $("#dateSlider").bind("slidechange", uiChange);
+        $("#dateSlider").slider("option", "value", 0);
 
       });
     
@@ -153,6 +157,9 @@
         
         <td style="padding-right: 15px;">Time Slider:</td>
         <td><div id="dateSlider" style="width:200px"></div></td>
+        
+        <td>Heatmap:</td>
+        <td><input id="heatmap" type="checkbox" /></td>
       
       </tr>
     </table>
