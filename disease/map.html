@@ -13,7 +13,7 @@
       
       var map = null;
       var layer = null;
-      var fusionTableId = 949030;
+      var fusionTableId = 949926;//949030;
       var defaultLat = 32.9352;
       var defaultLon = -118.3887;
       var useHeatMap = false;
@@ -38,6 +38,7 @@
       function updateMap(diseaseId, startDate, endDate){
         var query = "select * from " + fusionTableId;
         
+        /* this works for table id = 949030, the uncommented lines work for the aids data
         query += " where DiseaseID = " + diseaseId;
         
         if(startDate){
@@ -46,8 +47,11 @@
          if(endDate){
           query += " and DiagnosisTime < " + (endDate.getTime() / 1000);
         }
-
-        console.log(query)
+        */
+        query += " where Year = " + startDate.getFullYear() 
+        //query += " where Year > " + startDate.getFullYear() + " and Year < " + endDate.getFullYear();
+        
+        // console.log(query);
         layer.setQuery(query);
       }
      
