@@ -4,8 +4,11 @@
     
     <script src="/static/scripts/jquery-1.6.1.min.js"></script>
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-
-    <script>
+    
+    <link type="text/css" href="/static/css/ui-lightness/jquery-ui-1.8.13.custom.css" rel="Stylesheet" />  
+    <script type="text/javascript" src="/static/scripts/jquery-ui-1.8.13.custom.min.js"></script>
+    
+  <script>
     (function(){
       function hello(){
         alert("hello");
@@ -40,10 +43,10 @@
         query += " where DiseaseID = " + diseaseId;
         
         if(startDate){
-          query += " and DiagnosisTime > " + (new Date(startDate)).getTime();
+          query += " and DiagnosisTime > " + ((new Date(startDate)).getTime() / 1000);
         }
          if(endDate){
-          query += " and DiagnosisTime < " + (new Date(endDate)).getTime();
+          query += " and DiagnosisTime < " + ((new Date(endDate)).getTime() / 1000);
         }
         alert(query);
         layer.setQuery(query);
@@ -67,7 +70,10 @@
         $("#disease").change(uiChange);
         $("#startDate").change(uiChange);
         $("#endDate").change(uiChange);
-
+        
+        $("#startDate").datepicker();
+        $("#endDate").datepicker();
+        
       });
     
     })();

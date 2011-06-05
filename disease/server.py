@@ -61,7 +61,7 @@ application = tornado.web.Application([
   (r"/", IndexHandler),
   (r"/index", IndexHandler),
   (r"/map", MapHandler),
-  (r"/report", DiseaseReportHandler)
+  (r"/report", DiseaseReportHandler),
   (r"/disease", DiseaseHandler)
 ], **settings)
 
