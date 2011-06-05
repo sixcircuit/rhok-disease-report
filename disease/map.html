@@ -2,21 +2,21 @@
   <head>
     <title>Disease Map</title>
     
-    <script src="/static/scripts/jquery-1.6.1.min.js"></script>
+    <script src="static/scripts/jquery-1.6.1.min.js"></script>
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     
-    <link type="text/css" href="/static/css/ui-lightness/jquery-ui-1.8.13.custom.css" rel="Stylesheet" />  
-    <script type="text/javascript" src="/static/scripts/jquery-ui-1.8.13.custom.min.js"></script>
+    <link type="text/css" href="static/css/ui-lightness/jquery-ui-1.8.13.custom.css" rel="Stylesheet" />  
+    <script type="text/javascript" src="static/scripts/jquery-ui-1.8.13.custom.min.js"></script>
     
   <script>
     (function(){
       function loaded(){
-        alert("loaded");
+        //alert("loaded");
       }
 
       var map = null;
       var layer = null;
-      var fusionTableId = 949030;
+      var fusionTableId = 949926;
       var defaultLat = 32.9352;
       var defaultLon = -118.3887;
       
@@ -32,23 +32,32 @@
         
         var map = new google.maps.Map(document.getElementById("map"), myOptions);
         
-        layer = new google.maps.FusionTablesLayer(fusionTableId, { suppressInfoWindows: true });
+        layer = new google.maps.FusionTablesLayer(fusionTableId, { suppressInfoWindows: true, heatmap: {enabled: true} });
         layer.setMap(map);
         updateMap(1);
       }
-
+/*
       function updateMap(diseaseId, startDate, endDate){
         var query = "select * from " + fusionTableId;
         
-        query += " where DiseaseID = " + diseaseId;
-        alert("start:" + startDate + " end date: " + endDate);
+        //alert("start:" + startDate + " end date: " + endDate);
         if(startDate){
-          query += " and DiagnosisTime > " + ((new Date(startDate)).getTime() / 1000);
+          query += " where  Year >= " + startDate;
         }
          if(endDate){
-          query += " and DiagnosisTime < " + ((new Date(endDate)).getTime() / 1000);
+          query += " and Year <= " + endDate;
         }
-        // alert(query);
+        //alert(query);
+        layer.setQuery(query);
+      }
+ */
+
+      function updateMap(diseaseId, year){
+        var query = "select * from " + fusionTableId;
+        
+        //alert("start:" + startDate + " end date: " + endDate);
+        query += " where Year = " + year;
+        //alert(query);
         layer.setQuery(query);
       }
      
@@ -59,20 +68,22 @@
         showMap();
         
         function updateSliderMinMax(){
-          var min = 0;
-          var max = 0;
-          
+          var min = 1982;
+          var max = 2002;
+         
+         /* 
           if($("#startDate").val() && $("#endDate").val()){
-            var startDate = new Date($("#startDate").val());
-            var endDate = new Date($("#endDate").val()); 
+            var startDate = new $("#startDate").val();
+            var endDate = new $("#endDate").val(); 
             
-            min = startDate.getTime();
-            max = endDate.getTime();
+            min = startDate;
+            max = endDate;
             
-            // alert("min: " + min);
-            // alert("max: " + max);
+            //alert("min: " + min);
+            //alert("max: " + max);
           }
-            
+         */
+         
           $("#dateSlider").slider("option", "min", min);
           $("#dateSlider").slider("option", "max", max);
         }
@@ -85,13 +96,13 @@
           var startDate = $("#startDate").val();
           var endDate = $("#endDate").val();
           var sliderVal = $("#dateSlider").slider("option", "value");
-          var newTime = (new Date(startDate)).getTime() + sliderVal;
-          alert(newTime);
-          var tempDate = new Date(newTime);
+          //var newTime = new Date(startDate)).getTime() + sliderVal;
+          //alert(newTime);
+          //var tempDate = new Date(newTime);
 
-          startDate = tempDate.getMonth() + "/" + tempDate.getDate() + "/" + tempDate.getYear();
+          //startDate = tempDate.getMonth() + "/" + tempDate.getDate() + "/" + tempDate.getYear();
          
-          updateMap(diseaseId, startDate, endDate);
+          updateMap(diseaseId, sliderVal);
 
         }
 
