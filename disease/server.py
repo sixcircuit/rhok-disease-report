@@ -27,16 +27,13 @@ class IndexHandler(tornado.web.RequestHandler):
   def get(self):
     self.render("index.html")
 
-<<<<<<< HEAD
 class DiseaseHandler(tornado.web.RequestHandler):
   def get(self):
-    self.write(FT_CLIENT.query(SQL().select(DISEASE_TABLE_ID, ['DiseaseID', 'Disease'])))
-=======
+    self.write(FT_CLIENT.query(SQL().select(DISEASE_TABLE_ID, ['DiseaseID', 'Disease']
+
 class MapHandler(tornado.web.RequestHandler):
   def get(self):
     self.render("map.html")
-
->>>>>>> 9718722a8c9a910d0b8529e6de2316526c5cb064
 
 class DiseaseReportHandler(tornado.web.RequestHandler):
   def post(self):
@@ -65,6 +62,7 @@ application = tornado.web.Application([
   (r"/index", IndexHandler),
   (r"/map", MapHandler),
   (r"/report", DiseaseReportHandler)
+  (r"/disease", DiseaseHandler)
 ], **settings)
 
 if __name__ == "__main__":
